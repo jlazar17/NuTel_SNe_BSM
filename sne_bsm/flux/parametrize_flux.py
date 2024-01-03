@@ -230,7 +230,8 @@ class ParameterizedFlux(Flux):
             "dE": de / units["MeV"] * u.MeV,
             "tmin": tmin / units["second"] * u.s,
             "tmax": tmax / units["second"] * u.s,
-            "dt": dt / units["second"] * u.s,
+            "dt": 1e-3 * u.s,
+            #"dt": dt / units["second"] * u.s,
             "mixing_scheme": mixing_scheme,
             "hierarchy": mass_ordering,
         }
@@ -297,6 +298,8 @@ class ParameterizedFlux(Flux):
             keep_model_file=keep_model_file,
             dist0=dist0
         )
+        if dt!=1e-3*units.second:
+            sim.rebin_result(dt / units["second"] * u.s)
         t, hits = sim.detector_signal(dt / units["second"] * u.s)
         return t.value * units["second"], hits
         
