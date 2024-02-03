@@ -1,4 +1,17 @@
-
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/hits_and_likelihood.pdf}
+    \caption{\textbf{\textit{Timing profile of hits and test statistic as a function of the timing window.}}
+    The hit rate from the SM neutrino flux peaks at around 0.1~s, coinciding with the peak emission of $\bar{\nu}_{e}$ from the SN.
+    The shaded regions correspond to the timing windows that give peak sensitivity to the particular model.
+    The low-mass models can give more prompt signals since they decay quickly and travel luminally, while the subliminal speeds and relatively long decay times for larger-mass models lead to a delayed signal.
+    In the right panel, we show the test statistic as a function of the starting time and length of the window.
+    The relatively broad distribution of high test-statistic values shows that this analysis technique does not require extremely precise reconstruction of the $t_{\mathrm{bounce}}$.
+    These are the same points in the parameter space as Fig.~\ref{fig:fluxes}.
+    }
+    \label{fig:hits_and_likelihood}
+\end{figure*}
+\
 \textbf{\textit{Detector Response and Statistical Treatment}}---The IceCube Neutrino Observatory comprises 5,160 light-detecting digital optical modules (DOMs) buried in a cubic kilometer of the deep, transparent Antarctic ice sheet.
 When neutrinos interact within or near the detector, the charged by-products emit photons that the DOMs can detect.
 The DOMs are arranged on 86 strings of 60 DOMs with an inter-string distance between 70~m and 125~m.
@@ -6,12 +19,17 @@ This enables IceCube to resolve individual neutrinos with energies approximately
 The neutrinos produced by SNe are far below this threshold, and the neutrinos cannot be individually resolved; however, the immense number of neutrinos produced in an SN produces an increase in the single-photon rate of the detector.
 This increase in the rate of photons can be distinguished by the background caused by dark noise and radioactive activity in the DOM glass to enable the detection of galactic SNe events~\cite{Griswold:2023iwz}.
 
-New neutrino physics will affect the development of a SN, and will distort the temporal structure of the photon signal seen in the IceCube detector.
+New neutrino physics will affect the development of an SN and distort the temporal structure of the photon signal seen in the IceCube detector.
 Thus, one may look for excess events in certain time intervals as evidence of this new physics.
 In this work, we simulate the light curve produced by a standard SN with a progenitor mass of $8.8~M_{\odot}$ and those produced by different BSM scenarios; see the left-hand panel of Fig.~\ref{fig:hits_and_likelihood} for example light curves.
-We use the \texttt{ASTERIA}~\cite{spencer_griswold_2020_3926835} package in order to simulate the detector response to the different SNe scenarios as well as the thermal and radioactive noise in the DOMs. \yy{we need to provide a brief recasting of simulating the detector response, especially for different flavors.} \yy{contributions to bg}
+Since more than 93\% of the photons detected in IceCube originate in inverse beta decay interactions, the SM-only event rate peaks at around 0.1~s.
+BSM scenarios, on the other hand, can give rise to a prompt or delayed signal depending on the particulars of the model.
+For instance, since low-mass majorons have fast decay times, they can escape the SN early and decay to an all-flavor flux of neutrinos, producing $\bar{\nu}_{e}$ before the SM peak.
+The higher-mass majorons, on the other hand, decay less quickly and acquire a time decay from traveling sub-luminally, thus producing a later signal.
+We use the \texttt{ASTERIA}~\cite{spencer_griswold_2020_3926835} package to simulate the detector response to the different SNe scenarios and the thermal and radioactive noise in the DOMs.
 This package simulates light yields from coherent $\nu_{e}$ scattering off electrons in the ice, inverse beta decay of $\bar{\nu}_{e}$ on nuclei in the ice, and charged- and neutral-current interactions for $\nu_{\alpha}$.
 In order to interface to this package, we use \texttt{SNEWPY}~\cite{baxter2021snewpy} package and, in particular, the \texttt{ParametrizedFlux} object.
+In addition to photons produced in neutrino interactions, this package also simulates photons from thermal noise in the IceCube PMTs and from radioactive decay in the pressure glass housing.
 
 With the number of hits in the detector from noise, SM-only scenarios, and BSM scenarios as a function of time, we can then quantify the probability of seeing a certain number of hits in a given time window with:
 \begin{equation}
@@ -22,4 +40,5 @@ where $N_{\mathrm{obs.}}$ is the number of photons seen in the detector in the g
 In the right-hand panel of Fig.~\ref{fig:hits_and_likelihood}, we show the likelihood space as a function of the time at which the time range begins, $t_{\mathrm{start}}$ and the duration of the time range, $\Delta t$ for an example BSM hypothesis.
 
 For each physics hypothesis, we then select the time range that maximizes the test statistic and use that maximal test statistic value.
-The optimal ranges for each physics hypothesis are shown by the dashed lines and arrows in the left panel of Fig.~\ref{fig:hits_and_likelihood}.
+The optimal ranges for each physics hypothesis are shown by the shaded regions in the left panel of Fig.~\ref{fig:hits_and_likelihood}. Furthermore, the test statistic value relative to the SM-only hypothesis is shown in the right-hand panel of Fig.~\ref{fig:hits_and_likelihood}.
+The distribution of test-statistic values is not sharply peaked, and thus, this analysis retains much of its sensitivity even with errors on the reconstruction of $t_{\mathrm{bounce}}$ $\mathcal{O}\left(1~\mathrm{s}\right)$.
