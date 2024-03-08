@@ -70,7 +70,7 @@ Supernovae Time Profiles as a Probe of New Physics at Neutrino Telescopes
 Neutrino telescopes, including IceCube, can detect galactic supernova events by observing the collective rise in photomultiplier count rates with a subsecond time resolution. 
 Leveraging precise timing, we demonstrate for the first time the capability of neutrino telescopes to explore new weakly coupled states emitted from supernovae and subsequently decaying to neutrinos.
 Our approach utilizes publicly available packages, \texttt{ASTERIA} and \texttt{SNEWPY}, for simulating detector responses and parametrizing neutrino fluxes originating from Standard Model and new physics. 
-We present results for two beyond the Standard Model scenarios and introduce tool developed for testing a diverse range of new physics models.
+We present results for two beyond the Standard Model scenarios and introduce the tool developed for testing a diverse range of new physics models.
 \end{abstract}
 
 \maketitle
@@ -96,7 +96,7 @@ Such strategies were utilized for neutrino experiments operating during the SN 1
 \begin{figure}[t!]
     \centering
     \includegraphics[width=0.47\textwidth]{figures/Supernova_Diagram_Draft-1.pdf}
-    \caption{\textbf{The decay geometry for Majorons produced in SN.}}
+    \caption{\textbf{The decay geometry for Majorons produced in supernova.}}
     \label{fig:geometry}
 \end{figure}
 
@@ -149,7 +149,7 @@ The time delay, $\delta t$, relative to a relativistic particle moving along the
 \end{align}
 where we have split the contribution to $\delta t$ into two parts: the first part comes from the slow-moving Majorons before their decay, and the second part is due to the detour from the line-of-sight path at the given emission angle $\alpha$. 
 
-To get the characteristic value of $\delta t$, we can take $L_1 = L_\phi$ with $L_\phi = (E_\phi/m_\phi) \Gamma^{-1}_\phi \beta$ being the decay length of $\phi$.
+We will consider a supernova event that happens in the galaxy at a distance $D_{\rm SN}=\unit[10]{kpc}$, which is not unlikely~\cite{Reed:2005en,Rozwadowska:2020nab}. To get the characteristic value of $\delta t$, we can take $L_1 = L_\phi$ with $L_\phi = (E_\phi/m_\phi) \Gamma^{-1}_\phi \beta$ being the decay length of $\phi$.
 As for the parameter regions we considered, $(D_{\rm SN} -D_{\rm SN} \cos\theta) \ll \unit[10^{-3}]{s}$, $\delta t$ can be approximated as
 \begin{align}
     \delta t &\simeq L_\phi\left(\frac{1}{\beta} -1\right) + L_\phi(1-\cos\alpha) = \frac{8\pi}{3 E_{\nu}g_\phi^2}\,,
@@ -164,8 +164,8 @@ which is roughly independent of Majoron energy $E_\phi$.
     \caption{\textbf{\textit{Timing profile of hits and test statistic as a function of the timing window.}}
     The hit rate from the SM neutrino flux peaks at around 0.1~s, coinciding with the peak emission of $\bar{\nu}_{e}$ from the SN.
     The shaded regions correspond to the timing windows that give peak sensitivity to the particular model. These are the same benchmarks in the parameter space as in Fig.~\ref{fig:fluxes}.
-    In the right panel, we show the test statistic as a function of the starting time and length of the window.
-    The relatively broad distribution of high test-statistic values for the heavy Majoron benchmark ($m_\phi=200$ MeV) shows that this analysis technique does not require extremely precise reconstruction of the $t_{\mathrm{bounce}}$.
+    In the right panel, we show the test statistic as a function of the starting time and length of the window for the heavy Majoron benchmark ($m_\phi=200$ MeV).
+    The relatively broad distribution of high test-statistic values shows that this analysis technique does not require extremely precise reconstruction of the $t_{\mathrm{bounce}}$.
     }
     \label{fig:hits_and_likelihood}
 \end{figure*}
@@ -175,7 +175,7 @@ As the smallest decay distance beyond which the daughter neutrino can escape the
 We will also limit our analysis to a maximal time window of $\unit[100]{s}$ after supernova bounce.
 This time window is larger than typical values of time delay arising in the model.
 
-We will consider a supernova event that happens in the galaxy at a distance $D_{\rm SN}=\unit[10]{kpc}$, which is not unlikely~\cite{Reed:2005en,Rozwadowska:2020nab}.
+
 As $\bar{\nu}_e$ contribute chiefly to the signals at IceCube via inverse beta decay (IBD), we show in~\cref{fig:fluxes} the differential fluxes of daughter $\bar{\nu}_e$ at different times for two benchmark points in the Majoron model, in comparison to the SM $\bar{\nu}_e$ flux.
 We expect the observed signal timing distribution at IceCube to follow these patterns of $\bar{\nu}_{e}$ flux. 
 
@@ -246,15 +246,15 @@ In the right-hand panel of Fig.~\ref{fig:hits_and_likelihood}, we show the test 
     \includegraphics[width=0.47\textwidth]{figures/majoran_sensitivity}
     \caption{\textbf{\textit{Exclusion sensitivities for the Majoron case.}}
     The lines on this plot show the exclusion sensitivity for IceCube, IceCube Gen-2, Hyper-Kamiokande and DUNE.
-    The sensitivities shown as solid lines are computed from this work, whereas the dashed lines have been previously computed in~\cite{Brdar:2023tmi}.
-    Additionally, we also show the reaches by supernova cooling (blue) and by the lack of observation of high-energy neutrinos from SN1987A (grey). %\cite{Fiorillo:2022cdq}, with the width of the shading region quantifying uncertainties from supernova modeling.
+    %The sensitivities shown as solid lines are computed from this work, whereas the dashed lines are computed following~\cite{Brdar:2023tmi}.
+    Additionally, we also show the reaches by supernova cooling and by the lack of observation of high-energy neutrinos from SN1987A as black lines. %\cite{Fiorillo:2022cdq}, with the width of the shading region quantifying uncertainties from supernova modeling.
     }
     \label{fig:sensitivity}
 \end{figure} 
-Following our strategies above, we obtain the expected exclusion limits for various BSM scenarios for no observed excess of hits on top of background noise and standard neutrino flux.
-The expected exclusion limits are presented in \cref{fig:sensitivity} for the Majoron case. To illustrate the broad physics application of the analysis, we also show results for the sterile neutrino case with magnetic portal in the Supplemental Materials.
-Current limits \cite{Fiorillo:2022cdq} from the energy loss requirement (blue band), and non-observation of high-energy supernova neutrinos from SN 1987A (gray band) are also shown in \cref{fig:sensitivity} for the Majoron case. With future supernova explosions, IceCube can improve existing limits by one order of magnitude. 
-Moreover, while existing limits from time-integrated observables follow the behavior of $g_\phi\propto m^{-1}_\phi$ as Majoron production rate is proportional to $(g_\phi m_\phi)^2$, IceCube can provide a stronger limit than this by focusing on the time window, especially before the peak of SM $\bar{\nu}_e$ fluxes, to reduce SM condemnations.
+Following our strategies above, we obtain the expected exclusion limits for various BSM scenarios from no observed excess of hits on top of background noise and standard neutrino flux.
+The expected exclusion limits are presented in \cref{fig:sensitivity} for the Majoron case considering both IceCube and IceCube-Gen2. To illustrate the broad physics application of the analysis, we also show results for the sterile neutrino case with magnetic portal in the Supplemental Materials.
+Current limits \cite{Fiorillo:2022cdq} from the energy loss requirement, and non-observation of high-energy supernova neutrinos from SN 1987A are also shown in \cref{fig:sensitivity} for the Majoron case. With future supernova explosions, IceCube can improve current limits by one order of magnitude. 
+Moreover, while current limits from time-integrated observables follow the behavior of $g_\phi\propto m^{-1}_\phi$ as Majoron production rate is proportional to $(g_\phi m_\phi)^2$, IceCube can provide a stronger limit than this by focusing on the time window, especially before the peak of SM $\bar{\nu}_e$ fluxes, to reduce SM condemnations.
 
 We also present the estimated reaches of DUNE and Hyper-Kamiokande in \cref{fig:sensitivity} by looking for time-integrated high-energy neutrinos following Refs.~\cite{Fiorillo:2022cdq, Brdar:2023tmi}.
 While the constraints from IceCube for the intermediate mass region are comparable to that from DUNE and Hyper-Kamiokande, we observe that for both low-mass region $m_\phi \lesssim \unit[10]{MeV}$ and high-mass region $m_\phi \gtrsim \unit[200]{MeV}$, IceCube can provide stronger constraints.
@@ -273,6 +273,7 @@ We would like to thank Thomas Janka and Daniel Kresse for providing the data fro
 CAA are supported by the Faculty of Arts and Sciences of Harvard University, the National Science Foundation (NSF), the NSF AI Institute for Artificial Intelligence and Fundamental Interactions (IAIFI), the Research Corporation for Science Advancement, 
 and the David \& Lucile Packard Foundation.
 CAA and JL were partially supported by the Alfred P. Sloan Foundation for part of this work.
+JL acknowledges support from the Belgian American Educational Foundation.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -309,9 +310,9 @@ CAA and JL were partially supported by the Alfred P. Sloan Foundation for part o
     \centering
     \includegraphics[width=0.47\textwidth]{figures/magnetic_moment_sensitivity}
     \caption{\textbf{\textit{Exclusion sensitivities for the magnetic moment case.}}
-    The lines on this plot show the exclusion sensitivity for IceCube, IceCube-Gen2, Hyper-Kamiokande and DUNE. 
-    Sensitivities indicated by solid lines are newly computed in this work, whereas those shown by dashed lines have been previously computed in~\cite{Brdar:2023tmi}
-    The shaded regions are excluded by the energy loss constraints, non-observation of photon and neutrino signals from SN1987A studied in \cite{Brdar:2023tmi} and by constraints on the energy release from supernova explosion (SNIIP explosion)\cite{PhysRevLett.128.221103, chauhan2024probing}.
+    The lines on this plot show the exclusion sensitivity for IceCube, IceCube-Gen2, and the limits computed in \cite{Brdar:2023tmi} for Hyper-Kamiokande and DUNE. 
+    %Sensitivities indicated by solid lines are newly computed in this work, whereas those shown by dashed lines have been previously computed in~\cite{Brdar:2023tmi}
+    The shaded regions are excluded by the combination of energy loss requirement, non-observation of photon and neutrino signals from SN1987A studied in \cite{Brdar:2023tmi} and by constraints on the energy release from supernova explosion (SNIIP explosion)\cite{PhysRevLett.128.221103, chauhan2024probing}.
     }
     \label{fig:magnetic_moment_sensitivity}
 \end{figure}
@@ -320,7 +321,7 @@ Here we also present results for active-to-sterile neutrino transition magnetic 
     \mathcal{L} \supset \sum_\alpha d_\alpha \bar{N}\sigma_{\mu\nu} \nu^{\alpha} F^{\mu\nu}-\frac{M_N}{2} \bar{N}^c N + \text{h.c.}\,,
     \label{eq:Lag}
 \end{align}
-where $\nu^{\alpha}$ and $N$ represent active and sterile neutrinos, respectively. Further, $F^{\mu\nu}$ is the field strength tensor of the electromagnetic field, $d_\alpha$ is the dimensionful coefficient of this dimension-5 term and $M_N$ is sterile neutrino mass.  We assume flavor universal interaction $d_\alpha \equiv d$. We consider the two production channels for $N$ inside the SN: $\nu e^- \to N e^-$ at lower energies and $\nu \gamma \to N$ for larger active neutrino energies. Both processes occur due to the interaction term in \cref{eq:Lag}; after $N$ are produced, they decay to active neutrinos and photons which is again realized through the same term in the Lagrangian, with the decay width for $N\to\nu\gamma$ given by $\Gamma_N = 6d^2 M_N^3/4 \pi$ \cite{Plestid:2020vqf}. The limits from IceCube are shown in \cref{fig:magnetic_moment_sensitivity}, together with previously excluded regions by energy loss, non-observations of photons and neutrinos from SN1987A \cite{Brdar:2023tmi}, and constraints on the energy release from low-energy supernova explosions (SNIIP) \cite{PhysRevLett.128.221103, chauhan2024probing}. We also point out that by neglecting the $N$ production channel $\nu p^+\to N p^+$ inside SN, the limits we obtained are conservative relative to the SNIIP region taken from \cite{chauhan2024probing}. We notice that the time delay near the exclusion boundary are typically of $\Delta t \sim \mathcal{O}(1)$ sec, which is longer than the standard $\bar{\nu}_e$ peak luminosity time scale and this is why IceCube does not improve over DUNE and Hyper-Kamiokande. 
+where $\nu^{\alpha}$ and $N$ represent active and sterile neutrinos, respectively. Further, $F^{\mu\nu}$ is the field strength tensor of the electromagnetic field, $d_\alpha$ is the dimensionful coefficient of this dimension-5 term and $M_N$ is sterile neutrino mass.  We assume flavor universal interaction $d_\alpha \equiv d$. We consider the two production channels for $N$ inside the SN: $\nu e^- \to N e^-$ at lower energies and $\nu \gamma \to N$ for larger active neutrino energies. Both processes occur due to the interaction term in \cref{eq:Lag}; after $N$ are produced, they decay to active neutrinos and photons which is again realized through the same term in the Lagrangian, with the decay width for $N\to\nu\gamma$ given by $\Gamma_N = 6d^2 M_N^3/4 \pi$ \cite{Plestid:2020vqf}. The limits from IceCube are shown in SUPPL.\cref{fig:magnetic_moment_sensitivity}, together with previously excluded regions by energy loss, non-observations of photons and neutrinos from SN1987A \cite{Brdar:2023tmi}, and constraints on the energy release from low-energy supernova explosions (SNIIP) \cite{PhysRevLett.128.221103, chauhan2024probing}. We also point out that by neglecting the $N$ production channel $\nu p^+\to N p^+$ inside SN, the limits we obtained are conservative relative to the SNIIP region taken from \cite{chauhan2024probing}. We notice that the time delay near the exclusion boundary are typically of $\Delta t \sim \mathcal{O}(1)$ sec, which is longer than the standard $\bar{\nu}_e$ peak luminosity time scale and this is why IceCube does not improve over the limits computed in \cite{Brdar:2023tmi} for DUNE and Hyper-Kamiokande. 
 
 \end{document}
 
