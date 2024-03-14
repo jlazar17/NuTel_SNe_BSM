@@ -32,8 +32,6 @@
 \usepackage{url}
 \usepackage{units}
 \usepackage[normalem]{ulem}
-\newcommand{\yy}[1]{\color{red}[YY:#1]\color{black}}
-\newcommand{\YY}[1]{\color{red}#1\color{black}}
 \usepackage{graphicx}% Include figure files
 \usepackage{dcolumn}% Align table columns on decimal point
 \usepackage{bm}% bold math
@@ -43,7 +41,7 @@
 \begin{document}
 
 
-\preprint{USTC-ICTS/PCFT-24-07, APS/123-QED}
+\preprint{USTC-ICTS/PCFT-24-07}
 \bibliographystyle{apsrev4-1}
 \title{
 Supernovae Time Profiles as a Probe of New Physics at Neutrino Telescopes
@@ -67,8 +65,8 @@ Supernovae Time Profiles as a Probe of New Physics at Neutrino Telescopes
 %\date{\today}
 
 \begin{abstract}
-Neutrino telescopes, including IceCube, can detect galactic supernova events by observing the collective rise in photomultiplier count rates with a subsecond time resolution. 
-Leveraging precise timing, we demonstrate for the first time the capability of neutrino telescopes to explore new weakly coupled states emitted from supernovae and subsequently decaying to neutrinos.
+Neutrino telescopes, including IceCube, can detect galactic supernova events by observing the collective rise in photomultiplier count rates with a sub-second time resolution. 
+Leveraging precise timing, we demonstrate the ability of neutrino telescopes to explore new weakly coupled states emitted from supernovae and subsequently decaying to neutrinos.
 Our approach utilizes publicly available packages, \texttt{ASTERIA} and \texttt{SNEWPY}, for simulating detector responses and parametrizing neutrino fluxes originating from Standard Model and new physics. 
 We present results for two beyond the Standard Model scenarios and introduce the tool developed for testing a diverse range of new physics models.
 \end{abstract}
@@ -80,9 +78,10 @@ Puzzles such as the non-vanishing neutrino mass, the origin of observed matter-a
 Since there are also no firmly established clues on the energy scale at which the new particles should appear, numerous BSM searches across a wide range of scales have been performed: from collider searches at high energies~\cite{Nath:2010zj} to studies of cosmic microwave background at temperatures near absolute zero~\cite{Baumann:2015rya}.
 
 Supernovae (SNe) release most of their energy in neutrinos, offering unique opportunities to test BSM physics via neutrino interactions.
-The duration of the burst~\cite{Kamiokande-II:1987idp,Bionta:1987qt,Baksan} and inferred total energy of neutrinos~\cite{Loredo:2001rx,Pagliaroli:2008ur,Huedepohl2010} from SN 1987A---the only SN observed in neutrinos---have already given tentative constraints on the energies that could be taken away by any light BSM particle copiously produced in the interior of a star.
-Indeed, many different BSM scenarios have been constrained in this way, see \textit{e.g.} Refs.~\cite{Raffelt:2011nc,Arguelles:2016uwb,Suliga:2020vpz,Lucente:2021hbp,Caputo:2022rca,Caputo:2021rux,PhysRevD.100.083002,DeRocco:2019njg,Kazanas:2014mca,Magill:2018jla}. If, additionally, BSM particles emitted from SNe can decay to neutrinos en route to Earth, even stronger limits can be set, as shown, for instance, in Ref.~\cite{Fiorillo:2022cdq} for Majoron-like bosons and in Ref.~\cite{Brdar:2023tmi} for a realization featuring a neutrino magnetic moment portal.
-Specifically, unlike neutrinos inside the SN core, produced BSM states can stream out without further interactions.
+The duration of the burst~\cite{Kamiokande-II:1987idp,Bionta:1987qt,Baksan} and inferred total energy of neutrinos~\cite{Loredo:2001rx,Pagliaroli:2008ur,Huedepohl2010} from SN 1987A---the only SN observed in neutrinos---have already given tentative constraints on the energies that could be carried by light BSM particles produced in the interior of a star.
+Indeed, many different BSM scenarios have been constrained in this way, see \textit{e.g.} Refs.~\cite{Raffelt:2011nc,Arguelles:2016uwb,Suliga:2020vpz,Lucente:2021hbp,Caputo:2022rca,Caputo:2021rux,PhysRevD.100.083002,DeRocco:2019njg,Kazanas:2014mca,Magill:2018jla}.
+If, additionally, BSM particles emitted from SNe can decay to neutrinos en route to Earth, even stronger limits can be set, as shown, for instance, in Ref.~\cite{Fiorillo:2022cdq} for Majoron-like bosons and in Ref.~\cite{Brdar:2023tmi} for a realization featuring a neutrino magnetic moment portal.
+In contrast to SM neutrinos, BSM states produced in the SN core can freely stream out without further interactions.
 Consequently, they exit with higher energies than neutrinos, typically around $\mathcal{O}(100)$~MeV.
 Provided such particles decay to neutrinos, strong constraints can be set from the fact that neutrinos of $\mathcal{O}(100)$~MeV were not recorded from SN 1987A~\cite{Fiorillo:2022cdq, Brdar:2023tmi}.
 Such strategies were utilized for neutrino experiments operating during the SN 1987A event. Sensitivity projections for  DUNE~\cite{DUNE:2015lol} and Hyper-Kamiokande~\cite{Hyper-Kamiokande:2018ofw} in light of anticipated galactic SN event were also performed. 
@@ -92,7 +91,7 @@ Such strategies were utilized for neutrino experiments operating during the SN 1
     \centering
     \includegraphics[width=0.48\textwidth]{figures/Supernova_Diagram}
     \caption{\textit{\textbf{The decay geometry for Majorons produced in a SN.}}
-    Both the additional distance travelled relative to the direct line of sight and the potential non-relativistic speed of the Majoran of can induce a delayed signal relative to the SM signal.
+    Both the additional distance travelled relative to the direct line of sight and the potential non-relativistic speed of the Majoron can induce a delayed signal relative to the SM signal.
     }
     \label{fig:geometry}
 \end{figure}
@@ -100,33 +99,38 @@ Such strategies were utilized for neutrino experiments operating during the SN 1
 The IceCube Neutrino Observatory has pioneered the detection of neutrinos at $\mathcal{O}$(PeV) energies~\cite{IceCube:2014stg,IceCube:2018cha} and has identified several specific astrophysical neutrino sources~\cite{IceCube:2018cha,IceCube:2023ame,IceCube:2022der}.
 IceCube is also expected to be able to detect the next galactic SN~\cite{Kopke_2011}.
 In fact, a search for MeV neutrinos from optically obscured galactic SNe was recently performed in~\cite{IceCube:2023ogt} as well as the search for temporal correlation of MeV neutrino events with fast radio bursts~\cite{IceCube:2019acm}.
-In both cases, the observable is a collective rise in all photomultiplier rates on top of the background noise  within a certain time window, and it turns out that IceCube is sensitive to intervals as short as $\mathcal{O}(0.01)$ seconds. 
+In both cases, the observable is a collective rise in all photomultiplier rates on top of the background noise in a certain time window, and it turns out that IceCube is sensitive to intervals as short as $\mathcal{O}(0.01)$ seconds. 
 In this Letter, we will demonstrate that such precise time resolution will play a crucial role in testing new physics from SNe.   
 
-Once produced in SNe, the BSM particles can be nonrelativistic and travel slowly, causing time delays for secondary neutrinos. However, it is also possible that new states are rather light, implying that they may even exit the SN at earlier times with respect to certain flavors of SM neutrinos.
+BSM states can give rise to off-time signals in two ways.
+First, if the BSM particles are non-relativistic, they will produce a delayed signal. 
+However, it is also possible that new states are light, implying that they may even exit the SN at earlier times than certain flavors of SM neutrinos.
 Such an early BSM signal, which to the best of our knowledge has not been previously considered, can, for instance, be induced by light BSM states produced from $\nu_e$ scattering inside the SN; they would then subsequently decay to $\bar{\nu}_e$, which chiefly induces the signal at IceCube. 
-This would happen at early stages of a SN, around the neutralization burst, when $\nu_e$ are present and antineutrinos have not been produced yet.
+This would happen at early stages of an SN, around the neutralization burst, when $\nu_e$ are present, and $\bar{\nu}_e$ have not been produced yet.
 Such novel timing patterns generically exist in models with new weakly interacting particles, such as the aforementioned Majoron model~\cite{Fiorillo:2022cdq} and the neutrino magnetic moment portal~\cite{Magill:2018jla,Brdar:2020quo}.
 
-In this work we will show that, by using the timing measurements, neutrino telescopes will be able to provide powerful constraints on the BSM parameter space in association with forthcoming galactic SN events.\\
+In this work, we will show that, by using the timing measurements, neutrino telescopes will be able to provide powerful constraints on the BSM parameter space in association with forthcoming galactic SN events.\\
 %Via the timing measurement, we will show that neutrino telescopes will be able to provide powerful constraints on the BSM parameter space in association with forthcoming galactic SN events.\\
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\textbf{\textit{The Model}}---
-Let us first consider the Majoron model, studied in Ref.~\cite{Fiorillo:2022cdq}, where SN 1987A constraints were derived.
+\textbf{\textit{The Model}}---First, we consider the Majoron model, studied in Ref.~\cite{Fiorillo:2022cdq}, where SN 1987A constraints were derived.
 The relevant part of the Lagrangian reads
 \begin{align}
 \mathcal{L} \supset -g_{\alpha\beta} \nu_\alpha \nu_\beta \phi + \text{h.c.} - m_\phi \phi\phi^*\,,
 \end{align}
-where $\phi$ is the (pseudo)scalar, $m_\phi$ is the respective mass, and $g$ parametrizes interaction strength between $\phi$ and neutrinos. We assume flavor universal interaction and hence $g_{\alpha\beta}\equiv g_\phi \, \delta_{\alpha\beta}$. 
-Majorons are produced from (anti)neutrino coalescence in the star and subsequently decay to a pair of (anti)neutrinos resulting in BSM (anti)neutrino flux emitted from the star.
+where $\phi$ is the (pseudo)scalar, $m_\phi$ is its mass, and $g$ parametrizes interaction strength between $\phi$ and neutrinos.
+We assume flavor universal interaction and hence $g_{\alpha\beta}\equiv g_\phi \, \delta_{\alpha\beta}$. 
+Majorons are produced from (anti)neutrino coalescence in the star and subsequently decay to a pair of (anti)neutrinos, resulting in BSM (anti)neutrino flux emitted from the star.
 The total decay width is given by $\Gamma_\phi = 3g^2 m_\phi/16 \pi$.
 
 We will set SN bounce time $t_{\rm bounce}$ as $t = 0$.
 Using data from the simulation of $8.8 M_\odot$ progenitor star~\cite{Huedepohl2010} and including effects of neutrino oscillations assuming normal mass ordering~\cite{Dighe:1999bi}, we calculated standard neutrino fluxes at Earth. Following Ref.~\cite{Fiorillo:2022cdq}, we also calculated the flux of emitted Majorons.
-At $t \leq \unit[0.05]{s}$, Majorons are mainly produced through $\nu_e$ and $\nu_x$ coalescence where $\nu_x$ includes (anti)neutrinos of $\tau$ and $\mu$ flavor. After $\unit[0.05]{s}$, the flux of Majorons decreases with the total flux of neutrinos of all flavors. Thus we found that the Majoron flux peaks around $t \sim \unit[0.05]{s}$. We further cross checked the agreement with Ref.~\cite{Fiorillo:2022cdq} by reproducing their bound from SN energy loss. 
+At $t \leq \unit[0.05]{s}$, Majorons are mainly produced through $\nu_e$ and $\nu_x$ coalescence where $\nu_x$ includes (anti)neutrinos of $\tau$ and $\mu$ flavor.
+After $\unit[0.05]{s}$, the flux of Majorons decreases with the total flux of neutrinos of all flavors.
+Thus, we found that the Majoron flux peaks around $t \sim \unit[0.05]{s}$.
+We further cross-checked the agreement with Ref.~\cite{Fiorillo:2022cdq} by reproducing their bound from SN energy loss. 
 
 
 Very weakly coupled Majorons immediately stream out after being produced inside the star.
@@ -160,7 +164,7 @@ which is roughly independent of Majoron energy $E_\phi$.
     \centering
     \includegraphics[width=0.95\textwidth]{figures/hits_and_likelihood.pdf}
     \caption{\textbf{\textit{Timing profile of hits and test statistic as a function of the timing window.}}
-    In the left panel, we show the hit rate from the SM neutrino flux which peaks at around 0.1~s, coinciding with the peak emission of $\bar{\nu}_{e}$ from the SN. The shaded regions correspond to the timing windows that give peak sensitivity to the particular model. These are the same benchmarks in the parameter space as in Fig.~\ref{fig:fluxes}.
+    In the left panel, we show the hit rate from the SM neutrino flux which peaks at around 0.1~s, coinciding with the peak emission of $\bar{\nu}_{e}$ from the SN. The shaded regions correspond to the timing windows that give peak sensitivity to the particular model. These are the same benchmarks in the parameter space as in \cref{fig:fluxes}.
     In the right panel, we show the test statistic as a function of the starting time and length of the window for the heavy Majoron benchmark ($m_\phi=200$ MeV).
     The relatively broad distribution of high test-statistic values shows that this analysis technique does not require extremely precise reconstruction of the $t_{\mathrm{bounce}}$.
     }
@@ -197,7 +201,7 @@ As $L_1\lesssim L_\phi$, the time spread of the flux is roughly given by the afo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\textbf{\textit{Detector Response and Statistical Treatment}}---The IceCube Neutrino Observatory comprises 5,160 light-detecting digital optical modules (DOMs) buried in a cubic kilometer of the deep, transparent Antarctic ice sheet.
+\textbf{\textit{Detector Response and Statistical Treatment}}---The IceCube Neutrino Observatory comprises 5,160 light-detecting digital optical modules (DOMs) buried in a cubic kilometer of the deep, transparent Antarctic ice sheet~\cite{IceCube:2016zyt}.
 The DOMs are arranged on 86 strings of 60 DOMs each, with an interstring distance of 125~m (70~m for the eight centermost strings).
 These DOMs detect the photons emitted by the charged byproducts of a neutrino interaction in or near the instrumented volume.
 This enables IceCube to resolve individual neutrinos with energies ranging between a few GeV and a few PeV.
@@ -206,9 +210,9 @@ This dramatic increase in the rate of photons can be distinguished from the back
 
 New physics will affect the development of a SN and distort the temporal structure of the photon signal seen in the IceCube detector.
 Thus, one may look for excess events in certain time intervals as evidence of this new physics.
-In this work, we simulate the light curve produced by a standard SN with a progenitor mass of $8.8~M_{\odot}$ and those produced by different BSM scenarios mentioned previously; see the left-hand panel of Fig.~\ref{fig:hits_and_likelihood} for light curves of the same two benchmarks from \cref{fig:fluxes}.
+In this work, we simulate the light curve produced by a standard SN with a progenitor mass of $8.8~M_{\odot}$ and those produced by different BSM scenarios mentioned previously; see the left-hand panel of \cref{fig:hits_and_likelihood} for light curves of the same two benchmarks from \cref{fig:fluxes}.
 
-Since more than 93\% of the photons detected in IceCube originate in IBD interactions, the SM-only event rate peaks at around 0.1~s.
+Since more than 93\% of the photons detected in IceCube originate in IBD interactions~\cite{IceCube:2011cwc}, the SM-only event rate peaks at around 0.1~s.
 BSM scenarios, on the other hand, can give rise to an early or delayed signal depending on the particulars of the model.
 In essence, Majorons can be generated before the peak of the SM $\bar{\nu}_{e}$ flux, and as light Majorons can travel nearly relativistically, they can escape the SNe with negligible time delay and then decay to an all-flavor flux of neutrinos, producing early $\bar{\nu}_{e}$ fluxes before the SM one.
 The higher-mass Majorons, on the other hand, acquire a time delay from traveling sub-luminally and at a large detour, thus producing a later signal with sizable time delay.
@@ -233,9 +237,10 @@ With the number of hits in the detector from noise, SM-only scenarios, and BSM s
 \end{equation}
 where $N_{\mathrm{obs.}}$ is the number of photons seen in the detector in the given time and $N_{\mathrm{exp.}}$ is the number of photons expected from a particular BSM hypothesis. 
 For each BSM hypothesis, we select the time range that maximizes the test statistic and use that maximal test statistic value.
-The optimal ranges for each physics hypothesis are shown by the shaded regions in the left panel of Fig.~\ref{fig:hits_and_likelihood}, which is around $\unit[0.1]{s}$ ($\unit[10]{s}$) for the light (heavy) benchmark case, consistent with its time spread of the produced $\bar{\nu}_e$ flux.
+The optimal ranges for each physics hypothesis are shown by the shaded regions in the left panel of \cref{fig:hits_and_likelihood}, which is around $\unit[0.1]{s}$ ($\unit[10]{s}$) for the light (heavy) benchmark case, consistent with its time spread of the produced $\bar{\nu}_e$ flux.
 
-In the right-hand panel of Fig.~\ref{fig:hits_and_likelihood}, we show the test statistic as a function of the time at which the time range begins, $t_{\mathrm{start}}$, and the duration of the time range, $\Delta t$, for an example BSM hypothesis. The distribution of test-statistic values is not sharply peaked in time, and thus, this analysis retains much of its sensitivity even with errors on the reconstruction of $t_{\mathrm{bounce}}\sim\mathcal{O}\left(10^{-3}~\mathrm{s}\right)$~\cite{Halzen_2009}.
+In the right-hand panel of \cref{fig:hits_and_likelihood}, we show the test statistic as a function of the time at which the time range begins, $t_{\mathrm{start}}$, and the duration of the time range, $\Delta t$, for an example BSM hypothesis. The distribution of test-statistic values is not sharply peaked in time.
+Thus, this analysis retains much of its sensitivity even with errors on the reconstruction of $t_{\mathrm{bounce}}\sim\mathcal{O}\left(10^{-3}~\mathrm{s}\right)$~\cite{Halzen_2009}.
 
 
 
@@ -252,8 +257,8 @@ In the right-hand panel of Fig.~\ref{fig:hits_and_likelihood}, we show the test 
     }
     \label{fig:sensitivity}
 \end{figure} 
-Under the assumption that no excess neutrino were seen above the expected detector backgrounds and SM neutrinos, we obtain the expected $2\sigma$ exclusion limits by finding the coupling where Eq.~\ref{eq:likelihood} is equal to 3.841.
-These limits are presented in \cref{fig:sensitivity} for the Majoron case considering both IceCube and IceCube-Gen2.
+Assuming that IceCube does not observe an excess neutrino above the expected detector backgrounds and SM neutrinos, we obtain the expected $2\sigma$ exclusion limits by finding the coupling where \cref{eq:likelihood} is equal to 3.841.
+We show these in \cref{fig:sensitivity} for the Majoron case considering both IceCube and IceCube-Gen2.
 To illustrate the broad physics application of the analysis, we also show results for the sterile neutrino case with magnetic portal in the Supplemental Materials.
 Current limits~\cite{Fiorillo:2022cdq} from the energy loss requirement, and non-observation of high-energy SN neutrinos from SN 1987A are also shown in \cref{fig:sensitivity} for the Majoron case.
 A future SN explosions would enable IceCube to improve current limits by one order of magnitude. 
@@ -262,23 +267,23 @@ Moreover, while current limits from time-integrated observables follow the behav
 We also present the estimated reaches of DUNE and Hyper-Kamiokande in \cref{fig:sensitivity} by looking for time-integrated high-energy neutrinos following Refs.~\cite{Fiorillo:2022cdq, Brdar:2023tmi}.
 While the constraints from IceCube for the intermediate mass region are comparable to that from DUNE and Hyper-Kamiokande, we observe that for both low-mass region $m_\phi \lesssim \unit[10]{MeV}$ and high-mass region $m_\phi \gtrsim \unit[200]{MeV}$, IceCube can provide stronger constraints.
 This is the outcome we expect.
-For light $\phi$ case with negligible time delay, IceCube would observe early signals in a time window separated from that when most of the SM flux contribution appears, as we show in the left panel of \cref{fig:hits_and_likelihood}, thus enhancing the reaches. On the high mass end, neutrino signals will arrive much later than the SM case, where a time window at late time can be considered to reduce the standard neutrino contaminations. 
+For light $\phi$ case with negligible time delay, IceCube would observe early signals in a time window separated from that when most of the SM flux contribution appears, as we show in the left panel of \cref{fig:hits_and_likelihood}, thus enhancing the reaches. On the high mass end, neutrino signals will arrive much later than the SM case, where a time window at late time can be considered to reduce the standard neutrino contamination. 
 
 There are existing uncertainties from different modeling of SN explosions (see e.g. Ref.~\cite{li2023old}) as well as discrepancies between SN 1987A neutrino data and modeling. Nevertheless, we point out that even the uncertainties of around $2\sigma$  will only change our exclusion limits by a small factor.
 We make the code used in this work publicly available so that the impact of SN modeling uncertainties on the sensitivity of neutrino telescopes to BSM scenarios can be further explored.
 
 \textbf{\textit{Summary}}---
-In this Letter, we have demonstrated that neutrino telescopes such as IceCube can provide unprecedented probes of new physics, such as Majoron-like bosons and neutrino magnetic moment portal, by measuring SN time profiles to a window as short as $\mathcal{O}(0.01)$ s. Specifically, signatures outside the SM neutrino time window, including both early and delayed signals, can be effectively probed by neutrino telescopes. This analysis can be extended to test other BSM realizations including, but not limited to, sterile neutrinos with a mixing portal. 
+In this Letter, we have demonstrated that neutrino telescopes such as IceCube can provide unprecedented probes of new physics, such as Majoron-like bosons and neutrino magnetic moment portal, by measuring SN time profiles to a window as short as $\mathcal{O}(0.01)$ s. Specifically, signatures outside the SM neutrino time window, including both early and delayed signals, can be effectively probed by neutrino telescopes. This analysis can be extended to test other BSM realizations including, but not limited to, sterile neutrinos with a mixing portal.
+Additionally, the code used to probe these models is publicly available on \href{https://github.com/jlazar17/NuTel_SNe_BSM/}{GitHub}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\textit{Acknowledgements}---
-We would like to thank Thomas Janka and Daniel Kresse for providing the data from Garching supernovae simulations---available at \url{https://wwwmpa.mpa-garching.mpg.de/ccsnarchive/} in machine-readable form---and also for stimulating discussions.
-We would also like to thank Jackapan Pairin for their help designing figures in this work.
+\textit{Acknowledgements}---We want to thank Thomas Janka and Daniel Kresse for providing the data from Garching supernovae simulations---available at \url{https://wwwmpa.mpa-garching.mpg.de/ccsnarchive/} in machine-readable form---and also for stimulating discussions.
+We also thank Jackapan Pairin for their help designing figures in this work.
 Y.-Y. L is supported by the NSF of China through Grant No. 12305107, 12247103.
-CAA are supported by the Faculty of Arts and Sciences of Harvard University, the National Science Foundation (NSF), the NSF AI Institute for Artificial Intelligence and Fundamental Interactions (IAIFI), the Research Corporation for Science Advancement, 
+CAA are supported by the Faculty of Arts and Sciences of Harvard University, the National Science Foundation (NSF), the NSF AI Institute for Artificial Intelligence and Fundamental Interactions, the Research Corporation for Science Advancement, 
 and the David \& Lucile Packard Foundation.
 CAA and JL were partially supported by the Alfred P. Sloan Foundation for part of this work.
-JL is supported frbyom the Belgian American Educational Foundation.
+JL is supported by the Belgian American Educational Foundation.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
