@@ -536,7 +536,6 @@ def deserialize(g: h5.Group):
 def compute_moment(energies: np.ndarray, flux: np.ndarray, k: int, rtol=1e-7):
     interp = interp1d(energies, np.power(energies, k) * flux)
     yscale = interp(energies.min())
-    # print(yscale)
     f = lambda energy: interp(energy) / yscale
     moment, err = quad(
         f,
