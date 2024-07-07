@@ -155,7 +155,8 @@ def main():
         sm_flux = deserialize(h5f[args.sm_name])
     sm_t, sm_hits = sm_flux.get_hits(
         tmax=100 * units["second"],
-        model_file="magnetic_moment.txt"
+        model_file="magnetic_moment.txt",
+        dt=0.01*units["second"]
     )
     
     # Compute hits from BSM model
@@ -163,7 +164,8 @@ def main():
         flux = deserialize(h5f[args.bsm_name])
     bsm_t, bsm_hits = flux.get_hits(
         model_file="magnetic_moment.txt",
-        tmax=100 * units["second"]
+        tmax=100 * units["second"],
+        dt=0.01*units["second"]
     )
     
     # Make sure times are aligned for SM and BSM
@@ -174,7 +176,8 @@ def main():
     bg_hits = flux.get_background(
         shape=bsm_hits.shape,
         model_file="magnetic_moment.txt",
-        tmax=100 * units["second"]
+        tmax=100 * units["second"],
+        dt=0.01*units["second"]
     )
         
     # Run the trials for backgroun-only hypothesis
