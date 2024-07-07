@@ -145,8 +145,6 @@ def run_signal_trials(
 def main():
     args = initialize_args()
 
-    print(args)
-
     if args.asteria_path:
         import sys
         os.environ["ASTERIA"] = args.asteria_path
