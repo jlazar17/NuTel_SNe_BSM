@@ -38,6 +38,11 @@ def initialize_args():
         required=True
     )
     parser.add_argument(
+        "--sm_name",
+        type=int,
+        required=True
+    )
+    parser.add_argument(
         "--mismodeling_coefficient",
         type=float,
         default=1.0
@@ -94,6 +99,7 @@ def run_trials(
         itr = tqdm(itr)
     for idx in itr:
         data = np.random.poisson(signal_norm * nominal_bsm + mismodeling_coefficient * nominal_sm + nominal_bg)
+        print(data.sum())
         
         f = lambda x: np.sum(sig_likelihood([x[0], x[1]], data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty))
         g = lambda x: np.sum(bg_likelihood(x, data, nominal_sm, nominal_bg, sm_uncertainty))
@@ -156,6 +162,8 @@ def run_signal_trials(
 
 def main():
     args = initialize_args()
+
+    np.random.seed(args.seed)
 
     if args.asteria_path:
         import sys

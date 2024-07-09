@@ -24,6 +24,6 @@ if [ -z ${MISMODELING_COEFFICIENT+x} ]; then
     MISMODELING_COEFFICIENT=1.0
 fi
 
-CMD="python 1_run_trials.py --bsm_file $BSM_FILE --bsm_name $BSM_NAME --sm_file $SM_FILE --sm_name $SM_NAME -n $N --outfile $OUTFILE --no_track --tmpfile $TMPFILE --mismodeling_coefficient $MISMODELING_COEFFICIENT --sm_uncertainty $SM_UNCERTAINTY"
+CMD="python 1_run_trials.py --bsm_file $BSM_FILE --bsm_name $BSM_NAME --sm_file $SM_FILE --sm_name $SM_NAME -n $N --outfile $OUTFILE --no_track --tmpfile $TMPFILE --mismodeling_coefficient $MISMODELING_COEFFICIENT --sm_uncertainty $SM_UNCERTAINTY --seed $SEED"
 echo $CMD
 $CMD
