@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 from tqdm import tqdm
 
 from sne_bsm import units, deserialize
-from likelihood import sig_likelihood, bg_likelihood
+from sne_bsm.likelihood import sig_likelihood, bg_likelihood
 from utils import save_trials_results
 
 def initialize_args():
@@ -38,7 +38,7 @@ def initialize_args():
         required=True
     )
     parser.add_argument(
-        "--midmodeling_coefficient",
+        "--mismodeling_coefficient",
         type=float,
         default=1.0
     )
@@ -56,6 +56,16 @@ def initialize_args():
         "--sm_uncertainty",
         type=float,
         default=0.2
+    )
+    parser.add_argument(
+        "--no_track",
+        action="store_true",
+        default=False
+    )
+    parser.add_argument(
+        "--tmpfile",
+        type=str,
+        default=".run_trials.txt"
     )
     args = parser.parse_args()
     return args
@@ -82,7 +92,7 @@ def run_trials(
     itr = range(ntrial)
     if track:
         itr = tqdm(itr)
-    for _ in itr:
+    for idx in itr:
         data = np.random.poisson(signal_norm * nominal_bsm + mismodeling_coefficient * nominal_sm + nominal_bg)
         
         f = lambda x: np.sum(sig_likelihood([x[0], x[1]], data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty))
@@ -96,6 +106,8 @@ def run_trials(
         ts = -2 * (f(resf.x) - g(resg.x))
         result = TrialsResults(resg.x[0], resf.x[1], resf.x[0], ts)
         results.append(result)
+        if track and idx % 100==99:
+            print(np.quantile([x.ts for x in results], [0.5, 0.95]))
     return results
 
 def run_background_trials(
@@ -155,7 +167,7 @@ def main():
         sm_flux = deserialize(h5f[args.sm_name])
     sm_t, sm_hits = sm_flux.get_hits(
         tmax=100 * units["second"],
-        model_file="magnetic_moment.txt",
+        model_file=args.tmpfile,
         dt=0.01*units["second"]
     )
     
@@ -163,7 +175,7 @@ def main():
     with h5.File(args.bsm_file, "r") as h5f:
         flux = deserialize(h5f[args.bsm_name])
     bsm_t, bsm_hits = flux.get_hits(
-        model_file="magnetic_moment.txt",
+        model_file=args.tmpfile,
         tmax=100 * units["second"],
         dt=0.01*units["second"]
     )
@@ -175,15 +187,15 @@ def main():
     # Compute background hits
     bg_hits = flux.get_background(
         shape=bsm_hits.shape,
-        model_file="magnetic_moment.txt",
+        model_file=args.tmpfile,
         tmax=100 * units["second"],
         dt=0.01*units["second"]
     )
         
     # Run the trials for backgroun-only hypothesis
-    bg_trials = run_background_trials(args.n, bsm_hits, sm_hits, bg_hits, args.sm_uncertainty)
+    bg_trials = run_background_trials(args.n, bsm_hits, sm_hits, bg_hits, args.sm_uncertainty, track=not args.no_track)
     # Run the trials for signal-plus-background hypothesis
-    sig_trials = run_signal_trials(args.n, bsm_hits, sm_hits, bg_hits, args.sm_uncertainty)
+    sig_trials = run_signal_trials(args.n, bsm_hits, sm_hits, bg_hits, args.sm_uncertainty, track=not args.no_track)
     save_trials_results(args.outfile, sig_trials, bg_trials, metadata=vars(args))
 
 if __name__=="__main__":
