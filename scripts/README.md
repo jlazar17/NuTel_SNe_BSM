@@ -30,7 +30,7 @@ TODO
 
 ## Run trials
 
-Here is some example usage for running the analysis on a slurm cluster. For this to work, you will need to edit the `call_run_trials.sbatch` to reflect the server you are working on
+Here is some example usage for running the analysis on a slurm cluster. For this to work, you will need to edit the `call_run_trials.sbatch` in `../submit` to reflect the server you are working on
 
 ```bash
 export OUTFILE1=${DATADIR}/majoron_trials.h5
@@ -44,7 +44,7 @@ for A in `ls ${DATADIR}*.npy | xargs -n 1 basename`
 do 
     L=${#A}
     BSM_NAME=${A:0:$((L - 4))}_0
-    CMD="sbatch -D $PWD --export=SEED=$SEED,BSM_NAME=$BSM_NAME,BSM_FILE=$BSM_FILE,SM_FILE=$SM_FILE,SM_NAME=$SM_NAME,OUTFILE=$OUTFILE1,N=$N call_run_trials.sbatch"
+    CMD="sbatch -D $PWD --export=SEED=$SEED,BSM_NAME=$BSM_NAME,BSM_FILE=$BSM_FILE,SM_FILE=$SM_FILE,SM_NAME=$SM_NAME,OUTFILE=$OUTFILE1,N=$N ../submit/call_run_trials.sbatch"
     $CMD
     SEED=$(($SEED+1))
 done
@@ -81,7 +81,7 @@ for A in `ls ${DATADIR}*.npy | xargs -n 1 basename`
 do 
     L=${#A}
     BSM_NAME=${A:0:$((L - 4))}_0
-    CMD="sbatch -D $PWD --export=SEED=$SEED,BSM_NAME=$BSM_NAME,BSM_FILE=$BSM_FILE,SM_FILE=$SM_FILE,SM_NAME=$SM_NAME,OUTFILE=$OUTFILE1,N=$N,MISMODELING_COEFFICIENT=$MISMODELING_COEFFICIENT call_run_trials.sbatch"
+    CMD="sbatch -D $PWD --export=SEED=$SEED,BSM_NAME=$BSM_NAME,BSM_FILE=$BSM_FILE,SM_FILE=$SM_FILE,SM_NAME=$SM_NAME,OUTFILE=$OUTFILE1,N=$N,MISMODELING_COEFFICIENT=$MISMODELING_COEFFICIENT ../submit/call_run_trials.sbatch"
     $CMD
     SEED=$(($SEED+1))
 done
