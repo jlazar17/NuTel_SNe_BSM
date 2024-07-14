@@ -38,7 +38,7 @@ def initialize_args():
         required=True
     )
     parser.add_argument(
-        "--sm_name",
+        "--seed",
         type=int,
         required=True
     )
@@ -98,22 +98,21 @@ def run_trials(
     if track:
         itr = tqdm(itr)
     for idx in itr:
-        data = np.random.poisson(signal_norm * nominal_bsm + mismodeling_coefficient * nominal_sm + nominal_bg)
-        print(data.sum())
-        
+
+        underlying_truth = signal_norm * nominal_bsm + mismodeling_coefficient * nominal_sm + nominal_bg
+        data = np.random.poisson(underlying_truth)
+
         f = lambda x: np.sum(sig_likelihood([x[0], x[1]], data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty))
         g = lambda x: np.sum(bg_likelihood(x, data, nominal_sm, nominal_bg, sm_uncertainty))
 
-        x0 = [np.log(1), 1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
+        x0 = [0.5 + np.random.rand(), 1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
 
-        resf = minimize(f, x0, bounds=[(0, 20), (0, 5)])
-        resg = minimize(g, x0[1], bounds=[(0, 5)])
+        resf = minimize(f, x0, bounds=[(0, 20), (0.1, 5)])
+        resg = minimize(g, x0[1], bounds=[(0.1, 5)])
         
         ts = -2 * (f(resf.x) - g(resg.x))
         result = TrialsResults(resg.x[0], resf.x[1], resf.x[0], ts)
         results.append(result)
-        if track and idx % 100==99:
-            print(np.quantile([x.ts for x in results], [0.5, 0.95]))
     return results
 
 def run_background_trials(
@@ -160,8 +159,9 @@ def run_signal_trials(
     )
     return results
 
-def main():
-    args = initialize_args()
+def main(args=None):
+    if args is None:
+        args = initialize_args()
 
     np.random.seed(args.seed)
 
@@ -201,9 +201,25 @@ def main():
     )
         
     # Run the trials for backgroun-only hypothesis
-    bg_trials = run_background_trials(args.n, bsm_hits, sm_hits, bg_hits, args.sm_uncertainty, track=not args.no_track)
+    bg_trials = run_background_trials(
+        args.n,
+        bsm_hits,
+        sm_hits,
+        bg_hits,
+        args.sm_uncertainty,
+        track=not args.no_track,
+        mismodeling_coefficient=args.mismodeling_coefficient
+    )
     # Run the trials for signal-plus-background hypothesis
-    sig_trials = run_signal_trials(args.n, bsm_hits, sm_hits, bg_hits, args.sm_uncertainty, track=not args.no_track)
+    sig_trials = run_signal_trials(
+        args.n,
+        bsm_hits,
+        sm_hits,
+        bg_hits,
+        args.sm_uncertainty,
+        track=not args.no_track,
+        mismodeling_coefficient=args.mismodeling_coefficient
+    )
     save_trials_results(args.outfile, sig_trials, bg_trials, metadata=vars(args))
 
 if __name__=="__main__":
