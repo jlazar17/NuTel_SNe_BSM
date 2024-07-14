@@ -25,7 +25,6 @@ def poisson_loglikelihood(data: np.ndarray, model: np.ndarray) -> np.ndarray:
     
     if data.shape!=model.shape:
         raise ValueError("Incompatible data and model shapes")
-
     nonzero_mask = data > 0
     if np.any(model[nonzero_mask]==0):
         raise ValueError("Model is zero with non-zero data. LLH infinite")
@@ -47,7 +46,7 @@ def sig_likelihood(
 ):
     model = x[0] * nominal_bsm + x[1] * nominal_sm + nominal_bg
     nllh = -poisson_loglikelihood(data, model)
-    nllh += ((x[1] - 1) / sm_uncertainty) ** 2
+    #nllh += ((x[1] - 1) / sm_uncertainty) ** 2
     return nllh
 
 def bg_likelihood(x, data, nominal_sm, nominal_bg, sm_uncertainty, sig_norm=0.0):
