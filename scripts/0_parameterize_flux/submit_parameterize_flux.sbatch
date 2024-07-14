@@ -10,8 +10,9 @@
 eval `/cvmfs/icecube.opensciencegrid.org/py3-v4.2.1/setup.sh`
 cd /n/home12/jlazar/NuTel_SNe_BSM/
 poetry shell
-cd scripts
+cd scripts/
 source env.sh
+cd 0_parameterize_flux
 PYTHONPATH=$PYTHONPATH:/n/home12/jlazar/.cache/pypoetry/virtualenvs/sne-bsm-CmpHp_nm-py3.10/lib/python3.10/site-packages/
 
 python 0_parameterize_flux.py --infile ${INFILE} --outfile ${OUTFILE} --thin ${THIN}
