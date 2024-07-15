@@ -119,8 +119,10 @@ def main(args=None) -> None:
     with h5.File(args.infile) as h5f:
         ms = find_all_masses(h5f)
     
+    exclusions = []
     sensitivities = []
     for m in ms:
+        qs = []
         q0s = []
         couplings = []
         with h5.File(args.infile) as h5f:
@@ -131,25 +133,27 @@ def main(args=None) -> None:
                 q0 = find_q0(gr, args.quantile)
                 coupling = find_coupling(gr)
                 q0s = np.append(q0s, q0)
+                qs = np.append(qs, np.quantile(gr["signal/ts"][:], 1-args.quantile))
                 couplings = np.append(couplings, coupling)
         sorter = np.argsort(couplings)
         q0s = q0s[sorter]
+        qs = qs[sorter]
         couplings = couplings[sorter]
+        exclusion = couplings[qs > 0][0]
         interp = interp1d(np.log(couplings), q0s)
         f = lambda lg: interp(lg) - 0.5
         gsens = np.exp(ridder(f, np.log(couplings).min(), np.log(couplings).max()))
         sensitivities.append(gsens)
+        exclusions.append(exclusion)
 
     with h5.File(args.outfile, "r+") as h5f:
         gn = decide_group_name(h5f)
         h5f.create_group(gn)
         h5f[gn].create_dataset("masses", data=ms)
         h5f[gn].create_dataset("sensitivities", data=sensitivities)
+        h5f[gn].create_dataset("exclusions", data=exclusions)
         for k, v in vars(args).items():
             h5f[gn].attrs[k] = v
-
-    print(ms)
-    print(sensitivities)
 
 if __name__=="__main__":
     main()
