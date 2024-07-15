@@ -1,9 +1,11 @@
 import numpy as np
 import h5py as h5
+import os
 
 from scipy.optimize import minimize
 from tqdm import tqdm
 
+from sne_bsm import units, deserialize
 from sne_bsm.likelihood import sig_likelihood, bg_likelihood
 from utils import make_groupname
 
@@ -100,10 +102,6 @@ def main(args=None):
         with h5.File(args.outfile, "w") as _:
             pass
 
-    if args.asteria_path:
-        import sys
-        os.environ["ASTERIA"] = args.asteria_path
-        sys.path.append(f"{args.asteria_path}/python/")
 
     # Compute hits from SM flux
     with h5.File(args.sm_file, "r") as h5f:
@@ -146,4 +144,10 @@ def main(args=None):
 
     with h5.File(args.outfile, "r+") as h5f:
         gn = make_groupname(h5f, "results")
-        
+        h5f[gn].create_dataset("test_statistic_series", data=test_statistics)
+        h5f[gn].create_dataset("times", data=bsm_t / units["second"])
+        for k, v in vars(args).items():
+            h5f[gn].attrs[k] = v
+
+if __name__=="__main__":
+    main()
