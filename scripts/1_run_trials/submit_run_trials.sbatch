@@ -12,6 +12,7 @@ cd /n/home12/jlazar/NuTel_SNe_BSM/
 poetry shell
 cd scripts
 source env.sh
+cd 1_run_trials
 PYTHONPATH=$PYTHONPATH:/n/home12/jlazar/.cache/pypoetry/virtualenvs/sne-bsm-CmpHp_nm-py3.10/lib/python3.10/site-packages/
 
 TMPFILE="/n/holyscratch01/arguelles_delgado_lab/Everyone/jlazar/SNe_BSM/.tmp_${SLURM_JOB_ID}.txt"
