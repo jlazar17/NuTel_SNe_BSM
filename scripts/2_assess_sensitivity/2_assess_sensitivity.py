@@ -20,6 +20,11 @@ def initialize_args():
         required=True
     )
     parser.add_argument(
+        "--groupname",
+        type=str,
+        default="results"
+    )
+    parser.add_argument(
         "--quantile",
         type=float,
         default=0.95
@@ -147,7 +152,7 @@ def main(args=None) -> None:
         exclusions.append(exclusion)
 
     with h5.File(args.outfile, "r+") as h5f:
-        gn = decide_group_name(h5f)
+        gn = decide_group_name(h5f, basegroupname=args.groupname)
         h5f.create_group(gn)
         h5f[gn].create_dataset("masses", data=ms)
         h5f[gn].create_dataset("sensitivities", data=sensitivities)
