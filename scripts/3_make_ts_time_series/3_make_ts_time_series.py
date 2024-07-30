@@ -145,6 +145,9 @@ def main(args=None):
     with h5.File(args.outfile, "r+") as h5f:
         gn = make_groupname(h5f, "results")
         h5f[gn].create_dataset("test_statistic_series", data=test_statistics)
+        h5f[gn].create_dataset("sm_hits", data=sm_hits)
+        h5f[gn].create_dataset("bsm_hits", data=bsm_hits)
+        h5f[gn].create_dataset("bg_hits", data=bg_hits)
         h5f[gn].create_dataset("times", data=bsm_t / units["second"])
         for k, v in vars(args).items():
             h5f[gn].attrs[k] = v
