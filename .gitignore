@@ -1,5 +1,6 @@
 **/.ipynb_checkpoints/*
 **/__pycache__/*
+**/sandbox*/*
 **/.DS_Store*
 **/__pycache__*
 /resources
