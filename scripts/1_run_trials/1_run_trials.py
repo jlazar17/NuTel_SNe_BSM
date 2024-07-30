@@ -72,6 +72,11 @@ def initialize_args():
         type=str,
         default=".run_trials.txt"
     )
+    parser.add_argument(
+        "--hit_scaling",
+        type=float,
+        default=1.0
+    )
     args = parser.parse_args()
     return args
 
@@ -178,6 +183,7 @@ def main(args=None):
         model_file=args.tmpfile,
         dt=0.01*units["second"]
     )
+    sm_hits *= args.hit_scaling
     
     # Compute hits from BSM model
     with h5.File(args.bsm_file, "r") as h5f:
@@ -187,6 +193,7 @@ def main(args=None):
         tmax=100 * units["second"],
         dt=0.01*units["second"]
     )
+    bsm_hits *= args.hit_scaling
     
     # Make sure times are aligned for SM and BSM
     if np.any(sm_t!=bsm_t):
@@ -199,6 +206,7 @@ def main(args=None):
         tmax=100 * units["second"],
         dt=0.01*units["second"]
     )
+    bg_hits *= args.hit_scaling
         
     # Run the trials for backgroun-only hypothesis
     bg_trials = run_background_trials(
