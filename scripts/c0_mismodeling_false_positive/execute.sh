@@ -1,8 +1,6 @@
 seed=987
-for file in `ls /n/holylfs05/LABS/arguelles_delgado_lab/Everyone/jlazar/SNe_BSM/*.npy | xargs -n 1 basename`
+for bsmname in `cat bsmnames.txt`
 do 
-    l=${#file}
-    bsmname=${file:0:$(($l-4))}_0
     python c0_run_trials.py \
         --bsm_file /n/holylfs05/LABS/arguelles_delgado_lab/Everyone/jlazar/SNe_BSM/serialized_majoron_fluxes.h5 \
         --real_sm_file /n/holylfs05/LABS/arguelles_delgado_lab/Everyone/jlazar/SNe_BSM/serialized_sm_27solmass.h5 \
@@ -12,6 +10,6 @@ do
         --fake_sm_name sm_flux_0 \
         --seed ${seed} \
         --outfile ./test.h5 \
-        -n 10000
+        -n 1000
     seed=$(($seed+1))
 done
