@@ -123,8 +123,6 @@ def run_trials(
         resf_fake = minimize(f_fake, xf_fake, bounds=[(0, 20), (0.1, 20)])
         resg_real = minimize(g_real, xg_real, bounds=[(0.1, 20)])
         resg_fake = minimize(g_fake, xg_fake, bounds=[(0.1, 20)])
-        print(f"resf_fake.x=={resf_fake.x}")
-        print(f"resf_real.x=={resf_real.x}")
 
         res_real = TrialsResults(
             g_real(resg_real.x),
@@ -221,8 +219,6 @@ def main(args=None):
     # Make sure times are aligned for SM and BSM
     if np.any(fake_sm_t!=bsm_t):
         raise ValueError("Hit times are different !")
-    print(real_sm_t)
-    print(bsm_t)
     if np.any(real_sm_t!=bsm_t):
         raise ValueError("Hit times are different !")
 
