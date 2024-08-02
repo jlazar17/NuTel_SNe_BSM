@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 
 from sne_bsm import units, deserialize
 from sne_bsm.likelihood import sig_likelihood, bg_likelihood
-from utils import save_trials_results
+from utils import save_trials_results, get_snewpy_hits
 
 def initialize_args():
     from argparse import ArgumentParser
@@ -22,22 +22,12 @@ def initialize_args():
         required=True
     )
     parser.add_argument(
-        "--real_sm_file",
-        type=str,
-        required=True
-    )
-    parser.add_argument(
         "--fake_sm_file",
         type=str,
         required=True
     )
     parser.add_argument(
         "--bsm_name",
-        type=str,
-        required=True
-    )
-    parser.add_argument(
-        "--real_sm_name",
         type=str,
         required=True
     )
@@ -86,10 +76,11 @@ def initialize_args():
 
 @dataclass
 class TrialsResults:
-    llh_bg_real: float
-    llh_sb_real: float
-    llh_bg_fake: float
-    llh_sb_fake: float
+    llh_bg: float
+    llh_sb: float
+    bg_norm_bg: float
+    bg_norm_sb: float
+    sig_norm_sb: float
 
 def run_trials(
     ntrial: int,
@@ -102,8 +93,8 @@ def run_trials(
     mismodeling_coefficient=1.0,
     seed=None
 ):
-    
-    results = []
+
+    real_results, fake_results = [], []
     itr = range(ntrial)
     if track:
         try:
@@ -133,16 +124,29 @@ def run_trials(
         resf_fake = minimize(f_fake, xf_fake, bounds=[(0, 20), (0.1, 20)])
         resg_real = minimize(g_real, xg_real, bounds=[(0.1, 20)])
         resg_fake = minimize(g_fake, xg_fake, bounds=[(0.1, 20)])
+        print(f"resf_fake.x=={resf_fake.x}")
+        print(f"resf_real.x=={resf_real.x}")
 
-        result = TrialsResults(
+        res_real = TrialsResults(
             g_real(resg_real.x),
             f_real(resf_real.x),
+            resg_real.x,
+            resf_real.x[1],
+            resf_real.x[0]
+        )
+
+        res_fake = TrialsResults(
             g_fake(resg_fake.x),
             f_fake(resf_fake.x),
+            resg_fake.x,
+            resf_fake.x[1],
+            resf_fake.x[0]
         )
-        results.append(result)
 
-    return results
+        real_results.append(res_real)
+        fake_results.append(res_fake)
+
+    return real_results, fake_results
 
 def run_background_trials(
     ntrial: int,
@@ -194,22 +198,11 @@ def main(args=None):
 
     np.random.seed(args.seed)
 
-    #if args.asteria_path:
-    #    import sys
-    #    os.environ["ASTERIA"] = args.asteria_path
-    #    sys.path.append(f"{args.asteria_path}/python/")
+    real_sm_t, real_sm_hits = get_snewpy_hits()
 
     # Compute hits from SM flux
-    with h5.File(args.real_sm_file, "r") as h5f:
-        real_sm_flux = deserialize(h5f[args.real_sm_name])
     with h5.File(args.fake_sm_file, "r") as h5f:
         fake_sm_flux = deserialize(h5f[args.fake_sm_name])
-
-    real_sm_t, real_sm_hits = real_sm_flux.get_hits(
-        tmax=100 * units["second"],
-        model_file=args.tmpfile,
-        dt=0.01*units["second"]
-    )
 
     fake_sm_t, fake_sm_hits = fake_sm_flux.get_hits(
         tmax=100 * units["second"],
@@ -229,6 +222,8 @@ def main(args=None):
     # Make sure times are aligned for SM and BSM
     if np.any(fake_sm_t!=bsm_t):
         raise ValueError("Hit times are different !")
+    print(real_sm_t)
+    print(bsm_t)
     if np.any(real_sm_t!=bsm_t):
         raise ValueError("Hit times are different !")
 
@@ -240,20 +235,19 @@ def main(args=None):
         dt=0.01*units["second"]
     )
 
-    mask = np.logical_and(0.2*units["second"] <= bsm_t, bsm_t <= 7.0 * units["second"])
-
-    sig_trials = run_trials(
+    real_res, fake_res = run_trials(
         args.n,
-        bsm_hits[mask],
-        real_sm_hits[mask],
-        fake_sm_hits[mask],
-        bg_hits[mask],
+        bsm_hits,
+        real_sm_hits,
+        fake_sm_hits,
+        bg_hits,
         args.sm_uncertainty,
         track=not args.no_track,
         mismodeling_coefficient=args.mismodeling_coefficient,
         seed=args.seed
     )
-    save_trials_results(args.outfile, sig_trials, metadata=vars(args))
+    save_trials_results(args.outfile, real_res, fake_res, metadata=vars(args))
+
 
 if __name__=="__main__":
     main()
