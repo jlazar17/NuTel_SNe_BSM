@@ -82,7 +82,7 @@ def find_coupling(gr: h5.Group) -> float:
     """
     bsm_desc = gr.attrs["bsm_name"]
     logcoupling = float(
-        bsm_desc.split("-")[3].replace("g", "").replace("dot", ".").replace("n", "-").replace("d", ".")
+            bsm_desc.split("-")[3][1:].replace("g", "").replace("dot", ".").replace("n", "-").replace("d", ".")
     )
     return 10 ** logcoupling
 
@@ -145,12 +145,17 @@ def main(args=None) -> None:
         q0s = q0s[sorter]
         qs = qs[sorter]
         couplings = couplings[sorter]
-        exclusion = couplings[qs > 0][0]
+        try:
+            exclusion = couplings[qs > 0][0]
+        except IndexError:
+            print(f"{m} was unsuccessful on exclusion")
+            continue
         interp = interp1d(np.log(couplings), q0s)
         f = lambda lg: interp(lg) - 0.5
         try:
             gsens = np.exp(ridder(f, np.log(couplings).min(), np.log(couplings).max()))
         except ValueError as e:
+            print(f"{m} was unsuccesful on sensitivity")
             continue
         successful_ms.append(m)
         sensitivities.append(gsens)
