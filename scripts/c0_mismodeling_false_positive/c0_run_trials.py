@@ -93,7 +93,6 @@ def run_trials(
     mismodeling_coefficient=1.0,
     seed=None
 ):
-
     real_results, fake_results = [], []
     itr = range(ntrial)
     if track:
@@ -247,7 +246,6 @@ def main(args=None):
         seed=args.seed
     )
     save_trials_results(args.outfile, real_res, fake_res, metadata=vars(args))
-
 
 if __name__=="__main__":
     main()

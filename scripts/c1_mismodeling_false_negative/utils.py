@@ -3,6 +3,7 @@ import numpy as np
 import h5py as h5
 import snewpy
 
+from dataclasses import fields
 from typing import Dict, Any, List, Optional
 from dataclasses import fields
 from asteria.simulation import Simulation

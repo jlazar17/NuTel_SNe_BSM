@@ -126,6 +126,7 @@ def main(args=None) -> None:
     
     exclusions = []
     sensitivities = []
+    successful_ms = []
     for m in ms:
         qs = []
         q0s = []
@@ -147,14 +148,18 @@ def main(args=None) -> None:
         exclusion = couplings[qs > 0][0]
         interp = interp1d(np.log(couplings), q0s)
         f = lambda lg: interp(lg) - 0.5
-        gsens = np.exp(ridder(f, np.log(couplings).min(), np.log(couplings).max()))
+        try:
+            gsens = np.exp(ridder(f, np.log(couplings).min(), np.log(couplings).max()))
+        except ValueError as e:
+            continue
+        successful_ms.append(m)
         sensitivities.append(gsens)
         exclusions.append(exclusion)
 
     with h5.File(args.outfile, "r+") as h5f:
         gn = decide_group_name(h5f, basegroupname=args.groupname)
         h5f.create_group(gn)
-        h5f[gn].create_dataset("masses", data=ms)
+        h5f[gn].create_dataset("masses", data=successful_ms)
         h5f[gn].create_dataset("sensitivities", data=sensitivities)
         h5f[gn].create_dataset("exclusions", data=exclusions)
         for k, v in vars(args).items():
