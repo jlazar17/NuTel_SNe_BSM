@@ -1,8 +1,35 @@
 import os
 import numpy as np
 import h5py as h5
+import snewpy
 
 from typing import Dict, Any, List, Optional
+from dataclasses import fields
+from asteria.simulation import Simulation
+
+from sne_bsm import units
+
+def get_snewpy_hits():
+    from astropy import units as u
+    model = {}
+    model["name"] = "Nakazato_2013"
+    params = getattr(snewpy.models.ccsn, model["name"]).get_param_combinations()[0]
+    model["param"] = params
+    sim = Simulation(
+        model=model,
+        distance=10 * u.kpc, 
+        Emin=0*u.MeV,
+        Emax=100*u.MeV,
+        dE=1*u.MeV,
+        tmin=-1*u.s,
+        tmax=100*u.s,
+        dt=0.001*u.s,
+        mixing_scheme='AdiabaticMSW',
+        hierarchy='normal'
+    )
+    sim.run()
+    ts, hits = sim.detector_hits(dt=0.01 * u.second)
+    return ts.value * units["second"], hits
 
 def make_groupname(h5f: h5.File, basegroupname: str) -> None:
     idx = 0
@@ -23,7 +50,8 @@ def add_metadata(group: h5.Group, metadata: Dict[str, Any]) -> None:
 
 def save_trials_results(
     fname: str,
-    results: List,
+    real_results: List,
+    fake_results: List,
     basegroupname: str="results",
     metadata:Optional[Dict]=None
 ):
@@ -31,14 +59,17 @@ def save_trials_results(
         with h5.File(fname, "w") as _:
             pass
 
-    fields = "llh_bg_real llh_bg_fake llh_sb_real llh_sb_fake".split()
+    res = real_results[0]
+    fieldnames = [f.name for f in fields(res)]
     with h5.File(fname, "r+") as h5f:
         groupname = make_groupname(h5f, basegroupname)
-        h5f[groupname].create_group("signal")
-        h5f[groupname].create_group("background")
-        for field in fields:
-            data = [getattr(result, field) for result in results]
-            h5f[f"{groupname}"].create_dataset(field, data=data)
+        h5f[groupname].create_group("real")
+        h5f[groupname].create_group("fake")
+        for field in fieldnames:
+            data = [getattr(result, field) for result in real_results]
+            h5f[f"{groupname}/real"].create_dataset(field, data=data)
+            data = [getattr(result, field) for result in fake_results]
+            h5f[f"{groupname}/fake"].create_dataset(field, data=data)
         if metadata is None:
             return
         add_metadata(h5f[groupname], metadata)
