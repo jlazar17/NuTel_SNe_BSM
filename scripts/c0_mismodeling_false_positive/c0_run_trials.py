@@ -86,10 +86,11 @@ def initialize_args():
 
 @dataclass
 class TrialsResults:
-    llh_bg_real: float
-    llh_sb_real: float
-    llh_bg_fake: float
-    llh_sb_fake: float
+    llh_bg: float
+    llh_sb: float
+    bg_norm_bg: float
+    bg_norm_sb: float
+    sig_norm_sb: float
 
 def run_trials(
     ntrial: int,
@@ -103,7 +104,7 @@ def run_trials(
     seed=None
 ):
     
-    results = []
+    real_results, fake_results = [], []
     itr = range(ntrial)
     if track:
         try:
@@ -133,16 +134,29 @@ def run_trials(
         resf_fake = minimize(f_fake, xf_fake, bounds=[(0, 20), (0.1, 20)])
         resg_real = minimize(g_real, xg_real, bounds=[(0.1, 20)])
         resg_fake = minimize(g_fake, xg_fake, bounds=[(0.1, 20)])
+        print(f"resf_fake.x=={resf_fake.x}")
+        print(f"resf_real.x=={resf_real.x}")
 
-        result = TrialsResults(
+        res_real = TrialsResults(
             g_real(resg_real.x),
             f_real(resf_real.x),
+            resg_real.x,
+            resf_real.x[1],
+            resf_real.x[0]
+        )
+
+        res_fake = TrialsResults(
             g_fake(resg_fake.x),
             f_fake(resf_fake.x),
+            resg_fake.x,
+            resf_fake.x[1],
+            resf_fake.x[0]
         )
-        results.append(result)
 
-    return results
+        real_results.append(res_real)
+        fake_results.append(res_fake)
+
+    return real_results, fake_results
 
 def run_background_trials(
     ntrial: int,
@@ -242,7 +256,7 @@ def main(args=None):
 
     mask = np.logical_and(0.2*units["second"] <= bsm_t, bsm_t <= 7.0 * units["second"])
 
-    sig_trials = run_trials(
+    real_res, fake_res = run_trials(
         args.n,
         bsm_hits[mask],
         real_sm_hits[mask],
@@ -253,7 +267,7 @@ def main(args=None):
         mismodeling_coefficient=args.mismodeling_coefficient,
         seed=args.seed
     )
-    save_trials_results(args.outfile, sig_trials, metadata=vars(args))
+    save_trials_results(args.outfile, real_res, fake_res, metadata=vars(args))
 
 if __name__=="__main__":
     main()
