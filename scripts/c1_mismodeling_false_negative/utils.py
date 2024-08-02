@@ -1,9 +1,36 @@
 import os
 import numpy as np
 import h5py as h5
+import snewpy
 
 from dataclasses import fields
 from typing import Dict, Any, List, Optional
+from dataclasses import fields
+from asteria.simulation import Simulation
+
+from sne_bsm import units
+
+def get_snewpy_hits():
+    from astropy import units as u
+    model = {}
+    model["name"] = "Nakazato_2013"
+    params = getattr(snewpy.models.ccsn, model["name"]).get_param_combinations()[0]
+    model["param"] = params
+    sim = Simulation(
+        model=model,
+        distance=10 * u.kpc, 
+        Emin=0*u.MeV,
+        Emax=100*u.MeV,
+        dE=1*u.MeV,
+        tmin=-1*u.s,
+        tmax=100*u.s,
+        dt=0.001*u.s,
+        mixing_scheme='AdiabaticMSW',
+        hierarchy='normal'
+    )
+    sim.run()
+    ts, hits = sim.detector_hits(dt=0.01 * u.second)
+    return ts.value * units["second"], hits
 
 def make_groupname(h5f: h5.File, basegroupname: str) -> None:
     idx = 0
