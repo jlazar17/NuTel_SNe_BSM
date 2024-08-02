@@ -6,7 +6,7 @@ from scipy.optimize import minimize
 
 from sne_bsm import units, deserialize
 from sne_bsm.likelihood import sig_likelihood, bg_likelihood
-from utils import save_trials_results
+from utils import save_trials_results, get_snewpy_hits
 
 def initialize_args():
     from argparse import ArgumentParser
@@ -27,22 +27,12 @@ def initialize_args():
         required=True
     )
     parser.add_argument(
-        "--fake_sm_file",
-        type=str,
-        required=True
-    )
-    parser.add_argument(
         "--bsm_name",
         type=str,
         required=True
     )
     parser.add_argument(
         "--real_sm_name",
-        type=str,
-        required=True
-    )
-    parser.add_argument(
-        "--fake_sm_name",
         type=str,
         required=True
     )
@@ -103,7 +93,6 @@ def run_trials(
     mismodeling_coefficient=1.0,
     seed=None
 ):
-    
     real_results, fake_results = [], []
     itr = range(ntrial)
     if track:
@@ -115,7 +104,7 @@ def run_trials(
 
     if seed is not None:
         np.random.seed(seed)
-    underlying_truth = nominal_real_sm + nominal_bg + nominal_bsm
+    underlying_truth = nominal_real_sm + nominal_bg
     for idx in itr:
 
         data = np.random.poisson(underlying_truth)
@@ -206,24 +195,13 @@ def main(args=None):
 
     np.random.seed(args.seed)
 
-    #if args.asteria_path:
-    #    import sys
-    #    os.environ["ASTERIA"] = args.asteria_path
-    #    sys.path.append(f"{args.asteria_path}/python/")
+    fake_sm_t, fake_sm_hits = get_snewpy_hits()
 
     # Compute hits from SM flux
     with h5.File(args.real_sm_file, "r") as h5f:
         real_sm_flux = deserialize(h5f[args.real_sm_name])
-    with h5.File(args.fake_sm_file, "r") as h5f:
-        fake_sm_flux = deserialize(h5f[args.fake_sm_name])
 
     real_sm_t, real_sm_hits = real_sm_flux.get_hits(
-        tmax=100 * units["second"],
-        model_file=args.tmpfile,
-        dt=0.01*units["second"]
-    )
-
-    fake_sm_t, fake_sm_hits = fake_sm_flux.get_hits(
         tmax=100 * units["second"],
         model_file=args.tmpfile,
         dt=0.01*units["second"]
@@ -251,15 +229,14 @@ def main(args=None):
         tmax=100 * units["second"],
         dt=0.01*units["second"]
     )
-
-    mask = np.logical_and(0.2*units["second"] <= bsm_t, bsm_t <= 7.0 * units["second"])
-
+    print(fake_sm_hits.sum())
+    print(real_sm_hits.sum())
     real_res, fake_res = run_trials(
         args.n,
-        bsm_hits[mask],
-        real_sm_hits[mask],
-        fake_sm_hits[mask],
-        bg_hits[mask],
+        bsm_hits,
+        real_sm_hits,
+        fake_sm_hits,
+        bg_hits,
         args.sm_uncertainty,
         track=not args.no_track,
         mismodeling_coefficient=args.mismodeling_coefficient,
