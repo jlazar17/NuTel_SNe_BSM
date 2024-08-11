@@ -3,7 +3,7 @@
 #SBATCH -c 1 # Number of cores
 #SBATCH -p arguelles_delgado,shared
 #SBATCH --mem 4000
-#SBATCH -t 0-02:00:00 # Maximum execution time (D-HH:MM:SS)
+#SBATCH -t 0-08:00:00 # Maximum execution time (D-HH:MM:SS)
 #SBATCH -o /n/holyscratch01/arguelles_delgado_lab/Everyone/jlazar/SNe_BSM/output/%A.out # Standard output
 #SBATCH -e /n/holyscratch01/arguelles_delgado_lab/Everyone/jlazar/SNe_BSM/error/%A.err # Standard output
 
