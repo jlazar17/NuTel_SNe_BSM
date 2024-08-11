@@ -119,10 +119,10 @@ def run_trials(
         xg_real = [1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
         xg_fake = [1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
 
-        resf_real = minimize(f_real, xf_real, bounds=[(0, 20), (0.1, 20)])
-        resf_fake = minimize(f_fake, xf_fake, bounds=[(0, 20), (0.1, 20)])
-        resg_real = minimize(g_real, xg_real, bounds=[(0.1, 20)])
-        resg_fake = minimize(g_fake, xg_fake, bounds=[(0.1, 20)])
+        resf_real = minimize(f_real, xf_real, bounds=[(0.0, 5), (0.0, 20)])
+        resf_fake = minimize(f_fake, xf_fake, bounds=[(0.0, 5), (0.0, 20)])
+        resg_real = minimize(g_real, xg_real, bounds=[(0.0, 20)])
+        resg_fake = minimize(g_fake, xg_fake, bounds=[(0.0, 20)])
 
         res_real = TrialsResults(
             g_real(resg_real.x),
