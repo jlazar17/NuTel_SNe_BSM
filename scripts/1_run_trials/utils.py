@@ -4,11 +4,11 @@ import h5py as h5
 
 from typing import Dict, Any, List, Optional
 
-def make_groupname(h5f: h5.File, basegroupname: str) -> None:
+def make_groupname(h5f: h5.File, basegroupname: str, max_entries=1000) -> None:
     idx = 0
     groupname = basegroupname
     while True:
-        if idx > 1000:
+        if idx > max_entries:
             raise RuntimeError("Too many attempts")
         try:
             h5f.create_group(groupname)
