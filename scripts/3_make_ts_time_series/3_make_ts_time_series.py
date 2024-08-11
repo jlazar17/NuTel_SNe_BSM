@@ -68,27 +68,49 @@ def initialize_args():
 
 def compute_ts(
     n: int,
-    bsm_hits: np.ndarray,
-    sm_hits: np.ndarray,
-    bg_hits: np.ndarray,
+    nominal_bsm: np.ndarray,
+    nominal_sm: np.ndarray,
+    nominal_bg: np.ndarray,
     sm_uncertainty: float,
     track=True,
 ):
-    res = np.empty(bsm_hits.shape + (n,))
+    res = np.empty(nominal_bsm.shape + (n,))
 
-    underlying_truth = bg_hits + sm_hits + bsm_hits
+    underlying_truth = nominal_bg + nominal_sm + nominal_bsm
     itr = range(n)
     if track:
         itr = tqdm(itr)
     for idx in itr:
         data = np.random.poisson(underlying_truth)
-        f = lambda x: np.sum(sig_likelihood([x[0], x[1]], data, bsm_hits, sm_hits, bg_hits, sm_uncertainty))
-        g = lambda x: np.sum(bg_likelihood(x, data, sm_hits, bg_hits, sm_uncertainty))
-        x0 = [0.5 + np.random.rand(), 1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
-        resf = minimize(f, x0, bounds=[(0, 20), (0.1, 5)])
-        resg = minimize(g, x0[1], bounds=[(0.1, 5)])
-        a = sig_likelihood(resf.x, data, bsm_hits, sm_hits, bg_hits, sm_uncertainty)
-        b = bg_likelihood(resg.x, data, sm_hits, bg_hits, sm_uncertainty)
+        ntries = 0
+        while True:
+            ntries += 1
+            f = lambda x: np.sum(
+                sig_likelihood([x[0], x[1]], data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty)
+            )
+            g = lambda x: np.sum(
+                bg_likelihood(x, data, nominal_sm, nominal_bg, sm_uncertainty)
+            )
+
+            x0g = [1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
+            resg = minimize(g, x0g, bounds=[(0.1, 5)], tol=1e-30)
+
+            x0f = [0.5 + 0.3 * np.random.rand(), resg.x[0]]
+            if ntries > 0:
+                x0f[0] = np.random.uniform(0, 0.1)
+            resf = minimize(f, x0f, bounds=[(0, 5), (0.1, 5)], tol=1e-30)
+
+
+            ts = -2 * (f(resf.x) - g(resg.x))
+
+            if ts >=0 or resf.x[0]==0:
+                resfx = resf.x
+                break
+            elif abs(ts) < 1e-5 and f([0, resg.x[0]]) < f(resf.x):
+                resfx = [0, resg.x[0]]
+                break
+        a = sig_likelihood(resfx, data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty)
+        b = bg_likelihood(resg.x, data, nominal_sm, nominal_bg, sm_uncertainty)
         res[:, idx] = 2 * (b - a)
     return res
 
