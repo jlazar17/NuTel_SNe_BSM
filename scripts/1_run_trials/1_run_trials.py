@@ -2,7 +2,7 @@ import numpy as np
 import h5py as h5
 
 from dataclasses import dataclass
-from scipy.optimize import minimize
+from scipy.optimize import minimize, differential_evolution
 from tqdm import tqdm
 
 from sne_bsm import units, deserialize
@@ -106,17 +106,38 @@ def run_trials(
 
         underlying_truth = signal_norm * nominal_bsm + mismodeling_coefficient * nominal_sm + nominal_bg
         data = np.random.poisson(underlying_truth)
-
-        f = lambda x: np.sum(sig_likelihood([x[0], x[1]], data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty))
-        g = lambda x: np.sum(bg_likelihood(x, data, nominal_sm, nominal_bg, sm_uncertainty))
-
-        x0 = [0.5 + np.random.rand(), 1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
-
-        resf = minimize(f, x0, bounds=[(0, 20), (0.1, 5)])
-        resg = minimize(g, x0[1], bounds=[(0.1, 5)])
         
-        ts = -2 * (f(resf.x) - g(resg.x))
-        result = TrialsResults(resg.x[0], resf.x[1], resf.x[0], ts)
+        ts = -1
+        ntries = 0
+
+        while True:
+
+            f = lambda x: np.sum(sig_likelihood([x[0], x[1]], data, nominal_bsm, nominal_sm, nominal_bg, sm_uncertainty))
+            g = lambda x: np.sum(bg_likelihood(x, data, nominal_sm, nominal_bg, sm_uncertainty))
+
+            x0g = [1 + (np.random.rand() * sm_uncertainty * 2 - sm_uncertainty)]
+            resg = minimize(g, x0g, bounds=[(0.1, 5)], tol=1e-30)
+
+            x0f = [0.5 + 0.3 * np.random.rand(), resg.x[0]]
+            if ntries > 0:
+                x0f[0] = np.random.uniform(0, 0.1)
+            resf = minimize(f, x0f, bounds=[(0, 5), (0.1, 5)], tol=1e-30)
+
+            ntries += 1
+
+            ts = -2 * (f(resf.x) - g(resg.x))
+
+            if ts >=0 or resf.x[0]==0:
+                resfx = resf.x
+                break
+            elif abs(ts) < 1e-5 and f([0, resg.x[0]]) < f(resf.x):
+                resfx = [0, resg.x[0]]
+                break
+            
+            if ntries > 1000:
+                raise RuntimeError("Too many tries")
+
+        result = TrialsResults(resg.x[0], resfx[1], resfx[0], ts)
         results.append(result)
     return results
 
