@@ -29,7 +29,7 @@ def get_snewpy_hits():
         hierarchy='normal'
     )
     sim.run()
-    ts, hits = sim.detector_hits(dt=0.01 * u.second)
+    ts, hits = sim.detector_signal(dt=0.01 * u.second)
     return ts.value * units["second"], hits
 
 def make_groupname(h5f: h5.File, basegroupname: str) -> None:
