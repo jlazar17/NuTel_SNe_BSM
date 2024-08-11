@@ -2,8 +2,8 @@ import numpy as np
 import h5py as h5
 import os
 
-from tqdm import tqdm
 from dataclasses import dataclass
+from tqdm import tqdm
 from scipy.integrate import quad
 from scipy.interpolate import interp1d
 from scipy.special import gamma
@@ -132,6 +132,7 @@ class ParameterizedFlux(Flux):
     @property
     def params(self) -> List[Tuple[float, Params, Params, Params]]:
         return self._params
+
 
     def get_background(
         self,
