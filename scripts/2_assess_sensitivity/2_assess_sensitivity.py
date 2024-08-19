@@ -146,8 +146,8 @@ def main(args=None) -> None:
         qs = qs[sorter]
         couplings = couplings[sorter]
         try:
-            exclusion = couplings[qs > 0][0]
-        except IndexError:
+            exclusion = couplings[qs > 1e-5][0]
+        except IndexError as e:
             print(f"{m} was unsuccessful on exclusion")
             continue
         interp = interp1d(np.log(couplings), q0s)
